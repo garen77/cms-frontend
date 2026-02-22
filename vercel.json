@@ -1,4 +1,6 @@
 {
+  "buildCommand": "ng build --configuration production",
+  "outputDirectory": "dist/cms-frontend",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
