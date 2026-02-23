@@ -141,3 +141,15 @@ Strict mode enabled (`tsconfig.json:6`) with:
 Default backend URL: `http://localhost:8080/api`
 
 To change API endpoint, update `src/environments/environment.ts` for development or `environment.prod.ts` for production builds.
+
+## Deploy
+
+### Frontend - Vercel
+- Build command: `ng build --configuration production`
+- Output directory: `dist/cms-frontend/browser` (Angular 17 con builder esbuild genera in `/browser`)
+- Routing: configurato in `vercel.json` con rewrites su `index.html` per il routing client-side
+
+### Backend - Render
+- URL: `https://cms-x5bw.onrender.com`
+- Framework: Spring Boot
+- CORS configurato in Spring Security per accettare richieste dal dominio Vercel
