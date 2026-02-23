@@ -24,9 +24,66 @@ $my-theme: mat.define-light-theme((
   box-sizing: border-box;
 }
 
+// ─── Animated Background ───────────────────────────────────────────
+:root {
+  --bg-color-1: #e8eaf6;
+  --bg-color-2: #c5cae9;
+  --bg-color-3: #f3e5f5;
+  --bg-color-4: #fce4ec;
+  --wave-color: rgba(233, 30, 99, 0.08);
+}
+
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #f5f5f5;
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--bg-color-1),
+    var(--bg-color-2),
+    var(--bg-color-3),
+    var(--bg-color-4)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+  position: relative;
+  overflow-x: hidden;
+}
+
+// Overlay con pattern SVG di onde
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='600'%3E%3Cpath fill='rgba(103,58,183,0.15)' d='M0,220C240,380,480,80,720,220C960,380,1200,80,1440,220L1440,600L0,600Z'/%3E%3Cpath fill='rgba(63,81,181,0.30)' d='M0,300C240,60,480,540,720,300C960,60,1200,540,1440,300L1440,600L0,600Z'/%3E%3Cpath fill='rgba(233,30,99,0.25)' d='M0,380C240,140,480,580,720,380C960,140,1200,580,1440,380L1440,600L0,600Z'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 1440px 50vh;
+  background-position: bottom;
+  animation: waveDrift 20s linear infinite;
+  opacity: 1;
+  mask-image: linear-gradient(to bottom, transparent 30%, black 55%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black 55%);
+}
+
+// Tutti i contenuti sopra il background
+app-root > * {
+  position: relative;
+  z-index: 1;
+}
+
+// ─── Keyframes ──────────────────────────────────────────────────────
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes waveDrift {
+  0%   { background-position-x: 0px; }
+  100% { background-position-x: 1440px; }
 }
 
 html, body {
