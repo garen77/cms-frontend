@@ -30,7 +30,11 @@ import { MatIconModule } from '@angular/material/icon';
         <a mat-button routerLink="/contents" routerLinkActive="active">Articoli</a>
         
         <ng-container *ngIf="isAuthenticated()">
-          <a mat-button routerLink="/admin/contents/new" routerLinkActive="active" 
+          <a mat-button routerLink="/chat" routerLinkActive="active">
+            <mat-icon>chat</mat-icon>
+            Chat
+          </a>
+          <a mat-button routerLink="/admin/contents/new" routerLinkActive="active"
              *ngIf="isEditor()">Nuovo Articolo</a>
           
           <button mat-button [matMenuTriggerFor]="menu" class="user-menu-btn">
