@@ -22,7 +22,11 @@ import { ChatWindowComponent } from '../chat-window/chat-window.component';
       Connessione in tempo reale non disponibile, riprovo…
     </div>
     <div class="chat-layout">
-      <div class="sidebar-col">
+      <div class="sidebar-overlay"
+           [class.visible]="chatService.mobileSidebarOpen$ | async"
+           (click)="chatService.mobileSidebarOpen$.next(false)">
+      </div>
+      <div class="sidebar-col" [class.open]="chatService.mobileSidebarOpen$ | async">
         <app-chat-sidebar />
       </div>
       <div class="window-col">
@@ -41,16 +45,45 @@ import { ChatWindowComponent } from '../chat-window/chat-window.component';
       display: flex; flex: 1; overflow: hidden;
       background: white; border-radius: 8px;
       margin: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      position: relative;
     }
     .sidebar-col {
       width: 280px; min-width: 280px;
       border-right: 1px solid #e0e0e0; overflow: hidden;
     }
-    .window-col { flex: 1; overflow: hidden; }
+    .window-col { flex: 1; overflow: hidden; min-width: 0; }
+    .sidebar-overlay { display: none; }
 
     @media (max-width: 600px) {
-      .sidebar-col { width: 100%; min-width: 0; }
-      .window-col { display: none; }
+      :host { height: calc(100vh - 56px); }
+      .chat-layout { margin: 0; border-radius: 0; box-shadow: none; }
+      .sidebar-col {
+        position: fixed;
+        top: 0; left: 0;
+        width: 280px; height: 100vh;
+        z-index: 200;
+        background: white;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.2);
+        transform: translateX(-100%);
+        transition: transform 0.28s ease;
+        overflow: hidden;
+      }
+      .sidebar-col.open { transform: translateX(0); }
+      .window-col { display: block; width: 100%; }
+      .sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 199;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.28s ease;
+      }
+      .sidebar-overlay.visible {
+        opacity: 1;
+        pointer-events: all;
+      }
     }
   `]
 })
@@ -65,6 +98,10 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     const username = this.authService.currentUserValue?.username;
     if (token && username) {
       this.chatService.connect(token, username);
+    }
+
+    if (window.innerWidth <= 600 && this.chatService.activeConversation$.value === null) {
+      this.chatService.mobileSidebarOpen$.next(true);
     }
 
     this.chatService.getConversations().subscribe({

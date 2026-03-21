@@ -92,6 +92,7 @@ export class ChatSidebarComponent {
   openConversation(conv: ConversationSummary): void {
     this.chatService.activeConversation$.next(conv.userId);
     this.chatService.markAsRead(conv.userId).subscribe();
+    this.chatService.mobileSidebarOpen$.next(false);
     this.router.navigate(['/chat', conv.userId]);
   }
 
@@ -109,6 +110,7 @@ export class ChatSidebarComponent {
           ]);
         }
         this.chatService.activeConversation$.next(user.id);
+        this.chatService.mobileSidebarOpen$.next(false);
         this.router.navigate(['/chat', user.id]);
       });
   }

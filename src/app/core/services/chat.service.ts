@@ -19,6 +19,7 @@ export class ChatService {
   messagesMap$ = new BehaviorSubject<Map<number, ChatMessage[]>>(new Map());
   newMessage$ = new Subject<ChatMessage>();
   connected$ = new BehaviorSubject<boolean>(false);
+  mobileSidebarOpen$ = new BehaviorSubject<boolean>(false);
 
   connect(token: string, username: string): void {
     // Nuova istanza ad ogni connect per evitare conflitti con deactivate() asincrono

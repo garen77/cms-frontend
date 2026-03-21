@@ -27,6 +27,9 @@ import { ChatMessage } from '../../../core/models/chat.model';
   template: `
     <div class="window" *ngIf="recipientId; else noChat">
       <div class="win-header">
+        <button mat-icon-button class="mobile-back-btn" (click)="chatService.mobileSidebarOpen$.next(true)">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
         <div class="win-avatar">{{ recipientUsername[0] }}</div>
         <span class="win-username">{{ recipientUsername || '...' }}</span>
       </div>
@@ -79,6 +82,10 @@ import { ChatMessage } from '../../../core/models/chat.model';
   styles: [`
     .window { height: 100%; display: flex; flex-direction: column; }
     .win-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
+    .mobile-back-btn { display: none; }
+    @media (max-width: 600px) {
+      .mobile-back-btn { display: inline-flex; }
+    }
     .win-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       background: #3f51b5; color: white;
